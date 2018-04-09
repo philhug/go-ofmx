@@ -70,16 +70,16 @@ type SurfaceCharacteristics struct {
 }
 
 type Rwy struct {
-	RwyUid                  RwyUid `xml:"RwyUid"`
-	ValLen                  string `xml:"valLen"`
-	ValWid                  string `xml:"valWid"`
-	UomDimRwy               string `xml:"uomDimRwy"`
+	RwyUid    RwyUid `xml:"RwyUid"`
+	ValLen    string `xml:"valLen"`
+	ValWid    string `xml:"valWid"`
+	UomDimRwy string `xml:"uomDimRwy"`
 	SurfaceCharacteristics
-	ValLenStrip             string `xml:"valLenStrip"`
-	ValWidStrip             string `xml:"valWidStrip"`
-	UomDimStrip             string `xml:"uomDimStrip"`
-	CodeSts                 string `xml:"codeSts"`
-	TxtRmk                  string `xml:"txtRmk"`
+	ValLenStrip string `xml:"valLenStrip"`
+	ValWidStrip string `xml:"valWidStrip"`
+	UomDimStrip string `xml:"uomDimStrip"`
+	CodeSts     string `xml:"codeSts"`
+	TxtRmk      string `xml:"txtRmk"`
 }
 
 func (f *Rwy) Uid() FeatureUid {
@@ -131,17 +131,17 @@ func (uid *TwyUid) Hash() string {
 }
 
 type Twy struct {
-	TwyUid TwyUid `xml:"TwyUid"`
+	TwyUid   TwyUid `xml:"TwyUid"`
 	CodeType string `xml:"codeType"`
 	ValWid   string `xml:"valWid"`
 	UomWid   string `xml:"uomWid"`
 	SurfaceCharacteristics
-	CodeStrength     string `xml:"codeStrength"`     // DEPRECATED
-	TxtDescrStrength string `xml:"txtDescrStrength"` // DEPRECATED
-	CodeSts          string `xml:"codeSts"`
-	TxtMarking       string `xml:"txtMarking"`
-	TxtRmk           string `xml:"txtRmk"`
-	XtSurface XtSurface `xml:"xt_surface"`
+	CodeStrength     string    `xml:"codeStrength"`     // DEPRECATED
+	TxtDescrStrength string    `xml:"txtDescrStrength"` // DEPRECATED
+	CodeSts          string    `xml:"codeSts"`
+	TxtMarking       string    `xml:"txtMarking"`
+	TxtRmk           string    `xml:"txtRmk"`
+	XtSurface        XtSurface `xml:"xt_surface"`
 }
 
 func (f *Twy) Uid() FeatureUid {
@@ -149,7 +149,7 @@ func (f *Twy) Uid() FeatureUid {
 }
 
 type TlyUid struct {
-	TwyUid   TwyUid `xml:"TwyUid"`
+	TwyUid  TwyUid `xml:"TwyUid"`
 	CodePsn string `xml:"codePsn"`
 }
 
@@ -162,8 +162,8 @@ func (uid *TlyUid) Hash() string {
 }
 
 type Tly struct {
-	TlyUid TlyUid `xml:"TlyUid"`
-	TxtRmk           string `xml:"txtRmk"`
+	TlyUid    TlyUid    `xml:"TlyUid"`
+	TxtRmk    string    `xml:"txtRmk"`
 	XtSurface XtSurface `xml:"xt_surface"`
 }
 
@@ -189,7 +189,7 @@ func (uid *ApnUid) Hash() string {
 type Apn struct {
 	ApnUid ApnUid `xml:"ApnUid"`
 	SurfaceCharacteristics
-	TxtRmk           string `xml:"txtRmk"`
+	TxtRmk    string    `xml:"txtRmk"`
 	XtSurface XtSurface `xml:"xt_surface"`
 }
 

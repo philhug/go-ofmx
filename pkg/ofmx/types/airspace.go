@@ -5,7 +5,7 @@ package types
 type AseUid struct {
 	RegionalUid
 	CodeType string `xml:"codeType"`
-	CodeId string `xml:"codeId"`
+	CodeId   string `xml:"codeId"`
 }
 
 func (uid *AseUid) String() string {
@@ -56,28 +56,27 @@ func (uid *AbdUid) Hash() string {
 
 type Abd struct {
 	AbdUid AbdUid `xml:"AbdUid"`
-	Avx    []Avx    `xml:"Avx"`
+	Avx    []Avx  `xml:"Avx"`
 }
 
 func (f *Abd) Uid() FeatureUid {
 	return &f.AbdUid
 }
 
-
 type Avx struct { // TODO
-	GbrUid GbrUid `xml:"GbrUid"`
-	CodeType   string `xml:"codeType"`
-	GeoLat     string `xml:"geoLat"`
-	GeoLong    string `xml:"geoLong"`
-	CodeDatum  string `xml:"codeDatum"`
-	ValGeoAccuracy  string `xml:"valGeoAccuracy"`
-	UomGeoAccuracy  string `xml:"uomGeoAccuracy"`
-	GeoLatArc  string `xml:"geoLatArc"`
-	GeoLongArc string `xml:"geoLongArc"`
-	ValRadiusArc  string `xml:"valRadiusArc"`
-	UomRadiusArc  string `xml:"uomRadiusArc"`
-	ValHex  string `xml:"valHex"`
-	TxtRmk  string `xml:"txtRmk"`
+	GbrUid         GbrUid `xml:"GbrUid"`
+	CodeType       string `xml:"codeType"`
+	GeoLat         string `xml:"geoLat"`
+	GeoLong        string `xml:"geoLong"`
+	CodeDatum      string `xml:"codeDatum"`
+	ValGeoAccuracy string `xml:"valGeoAccuracy"`
+	UomGeoAccuracy string `xml:"uomGeoAccuracy"`
+	GeoLatArc      string `xml:"geoLatArc"`
+	GeoLongArc     string `xml:"geoLongArc"`
+	ValRadiusArc   string `xml:"valRadiusArc"`
+	UomRadiusArc   string `xml:"uomRadiusArc"`
+	ValHex         string `xml:"valHex"`
+	TxtRmk         string `xml:"txtRmk"`
 }
 
 type AdgUid struct {

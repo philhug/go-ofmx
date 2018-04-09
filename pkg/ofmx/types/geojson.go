@@ -1,23 +1,23 @@
 package types
 
 import (
+	flatten "github.com/doublerebel/bellows"
 	"github.com/paulmach/go.geo"
 	"github.com/paulmach/go.geojson"
-	flatten "github.com/doublerebel/bellows"
 
-	"fmt"
-	"strconv"
 	"errors"
-	"strings"
+	"fmt"
 	"math"
+	"strconv"
+	"strings"
 )
 
 func convertFromDMS(f float64) float64 {
 	d := math.Floor(f / 10000)
-	m := math.Mod(math.Floor(f / 100), 100)
+	m := math.Mod(math.Floor(f/100), 100)
 	s := math.Mod(f, 100)
 
-	r := math.Round((d + m / 60 + s / 3600) * 1000)
+	r := math.Round((d + m/60 + s/3600) * 1000)
 	return r / 1000
 }
 
@@ -36,16 +36,16 @@ func parseCoord(in string) (float64, error) {
 	if f > 180 {
 		f = convertFromDMS(f)
 	}
-	if f>180 {
-		fmt.Println("invalid coord:"+ in)
-		return f * dir, errors.New("invalid coord:"+ in)
+	if f > 180 {
+		fmt.Println("invalid coord:" + in)
+		return f * dir, errors.New("invalid coord:" + in)
 	}
 	return f * dir, nil
 }
 
 func parseLongLat(long, lat string, codeDatum string) (*geo.Point, error) {
 	if codeDatum != "" && codeDatum != "WGE" {
-		return nil, errors.New("Unsupported codeDatum: "+ codeDatum)
+		return nil, errors.New("Unsupported codeDatum: " + codeDatum)
 	}
 	longp, err := parseCoord(long)
 	if err != nil {
@@ -65,7 +65,7 @@ func (f *Dpn) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 	if err != nil {
 		return nil, err
 	}
-	p:= pt.ToGeoJSON()
+	p := pt.ToGeoJSON()
 	p.Properties["Type"] = "Dpn"
 	p.Properties["CodeId"] = f.DpnUid.CodeId
 	return p, nil
@@ -76,7 +76,7 @@ func (f *Dme) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 		return nil, err
 	}
 
-	p:= pt.ToGeoJSON()
+	p := pt.ToGeoJSON()
 	p.Properties["Type"] = "Dme"
 	p.Properties["CodeId"] = f.DmeUid.CodeId
 	return p, nil
@@ -86,7 +86,7 @@ func (f *Mkr) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 	if err != nil {
 		return nil, err
 	}
-	p:= pt.ToGeoJSON()
+	p := pt.ToGeoJSON()
 	p.Properties["Type"] = "Mkr"
 	p.Properties["CodeId"] = f.MkrUid.CodeId
 	return p, nil
@@ -96,7 +96,7 @@ func (f *Ndb) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 	if err != nil {
 		return nil, err
 	}
-	p:= pt.ToGeoJSON()
+	p := pt.ToGeoJSON()
 	p.Properties["Type"] = "Ndb"
 	p.Properties["CodeId"] = f.NdbUid.CodeId
 	return p, nil
@@ -106,7 +106,7 @@ func (f *Tac) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 	if err != nil {
 		return nil, err
 	}
-	p:= pt.ToGeoJSON()
+	p := pt.ToGeoJSON()
 	p.Properties["Type"] = "Tac"
 	p.Properties["CodeId"] = f.TacUid.CodeId
 	return p, nil
@@ -116,7 +116,7 @@ func (f *Vor) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 	if err != nil {
 		return nil, err
 	}
-	p:= pt.ToGeoJSON()
+	p := pt.ToGeoJSON()
 	p.Properties["Type"] = "Vor"
 	p.Properties["CodeId"] = f.VorUid.CodeId
 	return p, nil
@@ -128,7 +128,7 @@ func (f *Ahp) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 	if err != nil {
 		return nil, err
 	}
-	p:= pt.ToGeoJSON()
+	p := pt.ToGeoJSON()
 	p.Properties["Type"] = "Ahp"
 	p.Properties["CodeId"] = f.AhpUid.CodeId
 	return p, nil
@@ -163,7 +163,7 @@ func (f *XtSurface) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 			path.Push(pt)
 		}
 	}
-	p:= path.ToGeoJSON()
+	p := path.ToGeoJSON()
 	return p, nil
 }
 
@@ -186,12 +186,12 @@ func GetNearestPointOffset(pt *geo.Point, points *geo.Path) int {
 // Airspace
 
 func Reverse(a geo.PointSet) {
-	for i := len(a)/2-1; i >= 0; i-- {
-		opp := len(a)-1-i
+	for i := len(a)/2 - 1; i >= 0; i-- {
+		opp := len(a) - 1 - i
 		a[i], a[opp] = a[opp], a[i]
 	}
 }
-func GetSlice(pts geo.PointSet, start, end int) (geo.PointSet){
+func GetSlice(pts geo.PointSet, start, end int) geo.PointSet {
 	if start <= end {
 		return pts[start:end]
 	} else {
@@ -202,7 +202,7 @@ func GetSlice(pts geo.PointSet, start, end int) (geo.PointSet){
 }
 
 func (f *Abd) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
-	poly := geo.NewPath();
+	poly := geo.NewPath()
 	var queued *geo.Path
 	var start int
 
@@ -212,7 +212,7 @@ func (f *Abd) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 			fmt.Println(psn)
 			return nil, err
 		}
-		if queued != nil{
+		if queued != nil {
 			end := GetNearestPointOffset(psn, queued)
 			poly.PointSet = append(poly.PointSet, GetSlice(queued.PointSet, start, end)...)
 			// TODO
@@ -235,7 +235,7 @@ func (f *Abd) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 					return nil, err
 				}
 				start = GetNearestPointOffset(psn, queued)
-				}
+			}
 		case "CWA", "CCA":
 			fmt.Println("UNKNOWN CodeType: " + avx.CodeType)
 			fmt.Println(avx)
@@ -266,7 +266,7 @@ func (f *Abd) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 // Geographical Borders
 
 func (f *Gbr) GeoJsonPath(fmap FeatureMap) (*geo.Path, error) {
-	poly := geo.NewPath();
+	poly := geo.NewPath()
 	for _, gbv := range f.Gbv {
 		switch gbv.CodeType {
 		case "GRC":
@@ -306,11 +306,9 @@ func (f *Gbr) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 	return gf, err
 }
 
-func FillProperties (f GeoFeature, gf *geojson.Feature) {
+func FillProperties(f GeoFeature, gf *geojson.Feature) {
 	gf.Properties = flatten.Flatten(f)
 }
-
-
 
 type GeoFeature interface {
 	Uid() FeatureUid // From Feature
