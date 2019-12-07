@@ -22,6 +22,11 @@ type Dpn struct {
 	TxtName   string `xml:"txtName"`
 	TxtRmk    string `xml:"txtRmk"`
 	// AhpUid_codeId TODO ofm
+
+	// TODO, drop, invalid
+	XXuomFreq       string `xml:"uomFreq" validate:"isdefault"`
+	XXcodeTypeNorth string `xml:"codeTypeNorth" validate:"isdefault"`
+	XXAhpUid_codeId string `xml:"AhpUid_codeId" validate:"isdefault"`
 }
 
 func (f *Dpn) Uid() FeatureUid {
@@ -53,6 +58,15 @@ type Dme struct {
 	UomDistVer  string `xml:"uomDistVer"`
 	// Dtt TODO
 	TxtRmk string `xml:"txtRmk"`
+
+	// TODO, drop, invalid
+	XXValFreq       string `xml:"valFreq" validate:"isdefault"`
+	XXuomFreq       string `xml:"uomFreq" validate:"isdefault"`
+	XXuomElev       string `xml:"uomElev" validate:"isdefault"`
+	XXcodeTypeNorth string `xml:"codeTypeNorth" validate:"isdefault"`
+	XXvalMagVar     string `xml:"valMagVar" validate:"isdefault"`
+	XXValMagVarChg  string `xml:"valMagVarChg" validate:"isdefault"`
+	XXDateMagVar    string `xml:"dateMagVar" validate:"isdefault"`
 }
 
 func (f *Dme) Uid() FeatureUid {
@@ -119,29 +133,36 @@ type Ndb struct {
 	UomDistVer string `xml:"uomDistVer"`
 	// Ntt TODO
 	TxtRmk string `xml:"txtRmk"`
+
+	// TODO, drop, NDB doesn't have
+	XXCodeTypeNorth string `xml:"codeTypeNorth" validate:"isdefault"`
+	XXValMagVar     string `xml:"valMagVar" validate:"isdefault"`
+	XXValMagVarChg  string `xml:"valMagVarChg" validate:"isdefault"`
+	XXDateMagVar    string `xml:"dateMagVar" validate:"isdefault"`
+	XXuomElev       string `xml:"uomElev" validate:"isdefault"`
 }
 
 func (f *Ndb) Uid() FeatureUid {
 	return &f.NdbUid
 }
 
-type TacUid struct {
+type TcnUid struct {
 	RegionalUid
 	CodeId  string `xml:"codeId"`
 	GeoLat  string `xml:"geoLat"`
 	GeoLong string `xml:"geoLong"`
 }
 
-func (uid *TacUid) String() string {
+func (uid *TcnUid) String() string {
 	return uidString(*uid)
 }
 
-func (uid *TacUid) Hash() string {
+func (uid *TcnUid) Hash() string {
 	return uidHash(*uid)
 }
 
-type Tac struct {
-	TacUid      TacUid `xml:"TacUid"`
+type Tcn struct {
+	TcnUid      TcnUid `xml:"TcnUid"`
 	OrgUid      OrgUid `xml:"OrgUid"`
 	TxtName     string `xml:"txtName"`
 	CodeChannel string `xml:"codeChannel"`
@@ -152,8 +173,8 @@ type Tac struct {
 	TxtRmk string `xml:"txtRmk"`
 }
 
-func (f *Tac) Uid() FeatureUid {
-	return &f.TacUid
+func (f *Tcn) Uid() FeatureUid {
+	return &f.TcnUid
 }
 
 type VorUid struct {
@@ -188,6 +209,10 @@ type Vor struct {
 	UomDistVer     string `xml:"uomDistVer"`
 	// vtt
 	TxtRmk string `xml:"txtRmk"`
+
+	// TODO, drop invalid
+	XXvalMagDecl string `xml:"valMagDecl" validate:"isdefault"`
+	XXUomElev    string `xml:"uomElev" validate:"isdefault"`
 }
 
 func (f *Vor) Uid() FeatureUid {

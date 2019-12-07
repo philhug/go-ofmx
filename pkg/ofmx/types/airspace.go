@@ -6,6 +6,9 @@ type AseUid struct {
 	RegionalUid
 	CodeType string `xml:"codeType"`
 	CodeId   string `xml:"codeId"`
+
+	// TODO, drop again
+	NewEntity string `xml:"newEntity,attr" validate:"isdefault"`
 }
 
 func (uid *AseUid) String() string {
@@ -17,25 +20,32 @@ func (uid *AseUid) Hash() string {
 }
 
 type Ase struct {
-	AseUid           AseUid `xml:"AseUid"`
-	OrgUid           OrgUid `xml:"OrgUid"`
-	TxtName          string `xml:"txtName"`
-	CodeClass        string `xml:"codeClass"`
-	CodeDistVerUpper string `xml:"codeDistVerUpper"`
-	ValDistVerUpper  string `xml:"valDistVerUpper"`
-	UomDistVerUpper  string `xml:"uomDistVerUpper"`
-	CodeDistVerLower string `xml:"codeDistVerLower"`
-	ValDistVerLower  string `xml:"valDistVerLower"`
-	UomDistVerLower  string `xml:"uomDistVerLower"`
-	CodeDistVerMax   string `xml:"codeDistVerMax"`
-	ValDistVerMax    string `xml:"valDistVerMax"`
-	UomDistVerMax    string `xml:"uomDistVerMax"`
-	CodeDistVerMnm   string `xml:"codeDistVerMnm"`
-	ValDistVerMnm    string `xml:"valDistVerMnm"`
-	UomDistVerMnm    string `xml:"uomDistVerMnm"`
-	//Att
-	CodeSelAvbl string `xml:"codeSelAvbl"`
-	TxtRmk      string `xml:"txtRmk"`
+	AseUid           AseUid    `xml:"AseUid"`
+	OrgUid           OrgUid    `xml:"OrgUid"`
+	TxtLocalType     string    `xml:"txtLocalType"`
+	TxtName          string    `xml:"txtName"`
+	CodeClass        string    `xml:"codeClass"`
+	CodeLocInd       string    `xml:"codeLocInd"`
+	CodeDistVerUpper string    `xml:"codeDistVerUpper"`
+	ValDistVerUpper  string    `xml:"valDistVerUpper"`
+	UomDistVerUpper  string    `xml:"uomDistVerUpper"`
+	CodeDistVerLower string    `xml:"codeDistVerLower"`
+	ValDistVerLower  string    `xml:"valDistVerLower"`
+	UomDistVerLower  string    `xml:"uomDistVerLower"`
+	CodeDistVerMax   string    `xml:"codeDistVerMax"`
+	ValDistVerMax    string    `xml:"valDistVerMax"`
+	UomDistVerMax    string    `xml:"uomDistVerMax"`
+	CodeDistVerMnm   string    `xml:"codeDistVerMnm"`
+	ValDistVerMnm    string    `xml:"valDistVerMnm"`
+	UomDistVerMnm    string    `xml:"uomDistVerMnm"`
+	Att              Timetable `xml:"Att"`
+	CodeSelAvbl      string    `xml:"codeSelAvbl"`
+	TxtRmk           string    `xml:"txtRmk"`
+
+	// TODO, TODO, remove
+	XtSelAvail         string `xml:"xt_selAvail" validate:"isdefault"`
+	XtClassLayersAvail string `xml:"xt_classLayersAvail,attr" validate:"isdefault"`
+	XXtxtRmk           string `xml:"xt_txtRmk" validate:"isdefault"`
 }
 
 func (f *Ase) Uid() FeatureUid {
@@ -43,6 +53,9 @@ func (f *Ase) Uid() FeatureUid {
 }
 
 type AbdUid struct {
+	// TODO, temp allow mid
+	Uid
+
 	AseUid AseUid `xml:"AseUid"`
 }
 
@@ -63,6 +76,7 @@ func (f *Abd) Uid() FeatureUid {
 	return &f.AbdUid
 }
 
+// Avx - Airspace Border Vertex
 type Avx struct { // TODO
 	GbrUid         GbrUid `xml:"GbrUid"`
 	CodeType       string `xml:"codeType"`
@@ -77,9 +91,15 @@ type Avx struct { // TODO
 	UomRadiusArc   string `xml:"uomRadiusArc"`
 	ValHex         string `xml:"valHex"`
 	TxtRmk         string `xml:"txtRmk"`
+
+	// TODO, invalid
+	XXValCrc string `xml:"valCrc" validate:"isdefault"`
 }
 
 type AdgUid struct {
+	// TODO, temp allow mid
+	Uid
+
 	AseUid AseUid `xml:"AseUid"`
 }
 
@@ -93,7 +113,7 @@ func (uid *AdgUid) Hash() string {
 
 type Adg struct {
 	AdgUid           AdgUid `xml:"AdgUid"`
-	AseUidSameExtent AseUid `xml:"AseUid"`
+	AseUidSameExtent AseUid `xml:"AseUidSameExtent"`
 }
 
 func (f *Adg) Uid() FeatureUid {
@@ -101,8 +121,11 @@ func (f *Adg) Uid() FeatureUid {
 }
 
 type SaeUid struct {
+	// TODO, temp allow mid
+	Uid
+
 	SerUid SerUid `xml:"SerUid"`
-	AdgUid AdgUid `xml:"AdgUid"`
+	AseUid AseUid `xml:"AseUid"`
 }
 
 func (uid *SaeUid) String() string {

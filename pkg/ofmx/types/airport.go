@@ -1,6 +1,6 @@
 package types
 
-import ()
+// Ahp - Airport
 
 type AhpUid struct {
 	RegionalUid
@@ -38,14 +38,23 @@ type Ahp struct {
 	ValTransitionAlt string `xml:"valTransitionAlt"`
 	UomTransitionAlt string `xml:"uomTransitionAlt"`
 	TxtRmk           string `xml:"txtRmk"`
-	// Aht
+	// Aht TODO
+
+	// TODO, drop, document
+	XXTxtDescrSite     string `xml:"txtDescrSite" validate:"isdefault"`
+	XXvalGeoidUndulation     string `xml:"valGeoidUndulation" validate:"isdefault"`
 }
 
 func (f *Ahp) Uid() FeatureUid {
 	return &f.AhpUid
 }
 
+// Rwy - Runway
+
 type RwyUid struct {
+	// TODO, temp allow mid
+	Uid
+
 	AhpUid   AhpUid `xml:"AhpUid"`
 	TxtDesig string `xml:"txtDesig"`
 }
@@ -86,7 +95,12 @@ func (f *Rwy) Uid() FeatureUid {
 	return &f.RwyUid
 }
 
+// Rdn - Runway Direction
+
 type RdnUid struct {
+	// TODO, temp allow mid
+	Uid
+
 	RwyUid   RwyUid `xml:"RwyUid"`
 	TxtDesig string `xml:"txtDesig"`
 }
@@ -104,7 +118,7 @@ type Rdn struct {
 	GeoLat  string `xml:"geoLat"`
 	GeoLong string `xml:"geoLong"`
 	// TODO, sometimes called geoLon
-	BUGGeoLon string `xml:"geoLon"`
+	BUGGeoLon string `xml:"geoLon" validate:"isdefault"`
 
 	ValTrueBrg string `xml:"valTrueBrg"`
 	ValMagBrg  string `xml:"valMagBrg"`
@@ -117,7 +131,184 @@ func (f *Rdn) Uid() FeatureUid {
 	return &f.RdnUid
 }
 
+// Rdd - Runway Direction Declared Distance
+
+type RddUid struct {
+	// TODO, temp allow mid
+	Uid
+
+	RdnUid        RdnUid `xml:"RdnUid"`
+	CodeType      string `xml:"codeType"`
+	CodeDayPeriod string `xml:"codeDayPeriod"`
+}
+
+func (uid *RddUid) String() string {
+	return uidString(*uid)
+}
+
+func (uid *RddUid) Hash() string {
+	return uidHash(*uid)
+}
+
+type Rdd struct {
+	RddUid  RddUid `xml:"RddUid"`
+	ValDist int    `xml:"valDist"`
+	UomDist string `xml:"uomDist"`
+	TxtRmk  string `xml:"txtRmk"`
+}
+
+func (f *Rdd) Uid() FeatureUid {
+	return &f.RddUid
+}
+
+// Rls - Runway Direction Lighting
+
+type RlsUid struct {
+	// TODO, temp allow mid
+	Uid
+
+	RdnUid  RdnUid `xml:"RdnUid"`
+	CodePsn string `xml:"codePsn"`
+}
+
+func (uid *RlsUid) String() string {
+	return uidString(*uid)
+}
+
+func (uid *RlsUid) Hash() string {
+	return uidHash(*uid)
+}
+
+type Rls struct {
+	RlsUid     RlsUid `xml:"RlsUid"`
+	TxtDescr   string `xml:"txtDescr"`
+	CodeColour string `xml:"codeColour"`
+	TxtRmk     string `xml:"txtRmk"`
+}
+
+func (f *Rls) Uid() FeatureUid {
+	return &f.RlsUid
+}
+
+// Ahu - Airport Usage
+
+type AhuUid struct {
+	// TODO, temp allow mid
+	Uid
+
+	AhpUid AhpUid `xml:"AhpUid"`
+}
+
+func (uid *AhuUid) String() string {
+	return uidString(*uid)
+}
+
+func (uid *AhuUid) Hash() string {
+	return uidHash(*uid)
+}
+
+type Ahu struct {
+	AhuUid          AhuUid            `xml:"AhuUid"`
+	UsageLimitation []UsageLimitation `xml:"UsageLimitation"`
+
+	// TODO, THIS IS WRONG!!!
+	XXMid string `xml:"mid,attr" validate:"isdefault"`
+	XXusageLimitation interface{} `xml:"usageLimitation" validate:"isdefault"`
+	XXcodeUsageLimitation interface{} `xml:"codeUsageLimitation" validate:"isdefault"`
+}
+
+func (f *Ahu) Uid() FeatureUid {
+	return &f.AhuUid
+}
+
+type UsageLimitation struct {
+	CodeUsageLimitation string           `xml:"codeUsageLimitation"`
+	UsageCondition      []UsageCondition `xml:"UsageCondition"`
+	// TODO
+	//Timetable     Timetable `xml:"Timetable"`
+	TxtRmk string `xml:"txtRmk"`
+}
+
+type UsageCondition struct {
+	AircraftClass []AircraftClass `xml:"AircraftClass"`
+	FlightClass   []FlightClass   `xml:"FlightClass"`
+}
+
+type AircraftClass struct {
+	CodeType string `xml:"codeType"`
+}
+
+type FlightClass struct {
+	CodeRule    string `xml:"codeRule"`
+	CodeMil     string `xml:"codeMil"`
+	CodeOrigin  string `xml:"codeOrigin"`
+	CodePurpose string `xml:"codePurpose"`
+}
+
+// Ahs - Airport Ground Service
+type AhsUid struct {
+	// TODO, temp allow mid
+	Uid
+
+	AhpUid   AhpUid `xml:"AhpUid"`
+	CodeType string `xml:"codeType"`
+}
+
+func (uid *AhsUid) String() string {
+	return uidString(*uid)
+}
+
+func (uid *AhsUid) Hash() string {
+	return uidHash(*uid)
+}
+
+type Ahs struct {
+	AhsUid      AhsUid `xml:"AhsUid"`
+	TxtDescrFac string `xml:"txtDescrFac"`
+	// TODO, timetable
+	//Ast         Timetable `xml:"Ast"`
+	TxtRmk string `xml:"txtRmk"`
+}
+
+func (f *Ahs) Uid() FeatureUid {
+	return &f.AhsUid
+}
+
+// Aga - Airport Ground Service Address
+
+type AgaUid struct {
+	// TODO, temp allow mid
+	Uid
+
+	AhsUid   AhsUid `xml:"AhsUid"`
+	CodeType string `xml:"codeType"`
+	NoSeq    string `xml:"noSeq"`
+}
+
+func (uid *AgaUid) String() string {
+	return uidString(*uid)
+}
+
+func (uid *AgaUid) Hash() string {
+	return uidHash(*uid)
+}
+
+type Aga struct {
+	AgaUid     AgaUid `xml:"AgaUid"`
+	TxtAddress string `xml:"txtAddress"`
+	TxtRmk     string `xml:"txtRmk"`
+}
+
+func (f *Aga) Uid() FeatureUid {
+	return &f.AgaUid
+}
+
+// Twy - Taxiway
+
 type TwyUid struct {
+	// TODO, temp allow mid
+	Uid
+
 	AhpUid   AhpUid `xml:"AhpUid"`
 	TxtDesig string `xml:"txtDesig"`
 }
@@ -142,13 +333,21 @@ type Twy struct {
 	TxtMarking       string    `xml:"txtMarking"`
 	TxtRmk           string    `xml:"txtRmk"`
 	XtSurface        XtSurface `xml:"xt_surface"`
+
+	// TODO document
+	XtLabel        interface{} `xml:"xt_label"`
 }
 
 func (f *Twy) Uid() FeatureUid {
 	return &f.TwyUid
 }
 
+// Tly - Taxiway Lighting
+
 type TlyUid struct {
+	// TODO, temp allow mid
+	Uid
+
 	TwyUid  TwyUid `xml:"TwyUid"`
 	CodePsn string `xml:"codePsn"`
 }
@@ -171,11 +370,14 @@ func (f *Tly) Uid() FeatureUid {
 	return &f.TlyUid
 }
 
-// Apron Apn TODO
+// Apn - Apron TODO
 
 type ApnUid struct {
-	AhpUid   AhpUid `xml:"AhpUid"`
-	TextName string `xml:"textName"`
+	// TODO, temp allow mid
+	Uid
+
+	AhpUid  AhpUid `xml:"AhpUid"`
+	TxtName string `xml:"txtName"`
 }
 
 func (uid *ApnUid) String() string {
@@ -191,25 +393,31 @@ type Apn struct {
 	SurfaceCharacteristics
 	TxtRmk    string    `xml:"txtRmk"`
 	XtSurface XtSurface `xml:"xt_surface"`
+
+	// TODO document
+	XtLabel        interface{} `xml:"xt_label"`
 }
 
 func (f *Apn) Uid() FeatureUid {
 	return &f.ApnUid
 }
 
-// Fuel Ful
+// Ful - Fuel
+
 type FulUid struct {
-	//Uid
+	// TODO, temp allow mid
+	Uid
+
 	AhpUid  AhpUid `xml:"AhpUid"`
 	CodeCat string `xml:"codeCat"`
 }
 
 func (uid *FulUid) String() string {
-	return uidString(uid)
+	return uidString(*uid)
 }
 
 func (uid *FulUid) Hash() string {
-	return uidHash(uid)
+	return uidHash(*uid)
 }
 
 type Ful struct {
@@ -223,17 +431,21 @@ func (f *Ful) Uid() FeatureUid {
 	return &f.FulUid
 }
 
-type MiscUid struct {
-	RegionalUid
+// Msc - Miscellaneous
+
+type MscUid struct {
+	// TODO, temp allow mid
+	Uid
+
 	AhpUid  AhpUid `xml:"AhpUid"`
 	TxtName string `xml:"txtName"`
 }
 
-func (uid *MiscUid) String() string {
+func (uid *MscUid) String() string {
 	return uidString(*uid)
 }
 
-func (uid *MiscUid) Hash() string {
+func (uid *MscUid) Hash() string {
 	return uidHash(*uid)
 }
 
@@ -241,13 +453,16 @@ type XtSurface struct {
 	GmlPosList string `xml:"gmlPosList"`
 }
 
-type Misc struct {
-	MiscUid   MiscUid   `xml:"miscUid"`
+type Msc struct {
+	MscUid    MscUid    `xml:"MscUid"`
 	Type      string    `xml:"type"`
 	TxtRmk    string    `xml:"txtRmk"`
 	XtSurface XtSurface `xml:"xt_surface"`
+
+	// TODO document
+	XtLabel        interface{} `xml:"xt_label"`
 }
 
-func (f *Misc) Uid() FeatureUid {
-	return &f.MiscUid
+func (f *Msc) Uid() FeatureUid {
+	return &f.MscUid
 }

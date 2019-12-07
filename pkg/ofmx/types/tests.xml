@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+  <testsuite name="github.com/philhug/go-ofmx/pkg/ofmx/types" tests="7" errors="0" failures="6" skip="0">
+    <testcase classname="github.com/philhug/go-ofmx/pkg/ofmx/types" name="TestAhpUidHash" time="0.00">
+
+      <failure type="go.error" message="error">
+        <![CDATA[	assertions.go:239:                           	Error Trace:	airport_test.go:11
+			Error:      	Not equal: 
+			            	expected: "AhpUid|LF|LFMD"
+			            	actual: "AhpUid||LF|LFMD"]]>
+      </failure>    </testcase>
+    <testcase classname="github.com/philhug/go-ofmx/pkg/ofmx/types" name="TestUidHash" time="0.00">
+
+      <failure type="go.error" message="error">
+        <![CDATA[	assertions.go:239:                           	Error Trace:	generic_test.go:11
+			Error:      	Not equal: 
+			            	expected: "VorUid|LF|AGN|435316.90N|0005222.30E"
+			            	actual: "VorUid||LF|AGN|435316.90N|0005222.30E"]]>
+      </failure>    </testcase>
+    <testcase classname="github.com/philhug/go-ofmx/pkg/ofmx/types" name="TestVorUidHash" time="0.00">
+
+      <failure type="go.error" message="error">
+        <![CDATA[	assertions.go:239:                           	Error Trace:	navigation_test.go:11
+			Error:      	Not equal: 
+			            	expected: "VorUid|LF|AGN|435316.90N|0005222.30E"
+			            	actual: "VorUid||LF|AGN|435316.90N|0005222.30E"]]>
+      </failure>    </testcase>
+    <testcase classname="github.com/philhug/go-ofmx/pkg/ofmx/types" name="TestUniUidHash" time="0.00">
+
+      <failure type="go.error" message="error">
+        <![CDATA[	assertions.go:239:                           	Error Trace:	organisation_test.go:11
+			Error:      	Not equal: 
+			            	expected: "UniUid|LF|STRASBOURG APP"
+			            	actual: "UniUid||LF|STRASBOURG APP"]]>
+      </failure>    </testcase>
+    <testcase classname="github.com/philhug/go-ofmx/pkg/ofmx/types" name="TestSerSerHash" time="0.00">
+
+      <failure type="go.error" message="error">
+        <![CDATA[	assertions.go:239:                           	Error Trace:	organisation_test.go:20
+			Error:      	Not equal: 
+			            	expected: "SerUid|LF|STRASBOURG APP|APP|1"
+			            	actual: "SerUid|||LF|STRASBOURG APP|APP|1"]]>
+      </failure>    </testcase>
+    <testcase classname="github.com/philhug/go-ofmx/pkg/ofmx/types" name="TestFqyUidHash" time="0.00">
+
+      <failure type="go.error" message="error">
+        <![CDATA[	assertions.go:239:                           	Error Trace:	organisation_test.go:30
+			Error:      	Not equal: 
+			            	expected: "FqyUid|LF|STRASBOURG APP|APP|1|134.575"
+			            	actual: "FqyUid||||LF|STRASBOURG APP|APP|1|134.575"]]>
+      </failure>    </testcase>
+    <testcase classname="github.com/philhug/go-ofmx/pkg/ofmx/types" name="TestNewFeature" time="0.00">
+
+    </testcase>
+  </testsuite>

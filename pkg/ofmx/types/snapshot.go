@@ -12,6 +12,7 @@ import (
 type AixmSnapshot struct {
 	//XMLName string
 	Xsi string `xml:"xsi,attr"`
+	NoNamespaceSchemaLocation string `xml:"noNamespaceSchemaLocation,attr"`
 
 	Version   string `xml:"version,attr"`
 	Origin    string `xml:"origin,attr"`
@@ -38,7 +39,7 @@ func (s *FeatureList) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error
 	if err == nil {
 		err := d.DecodeElement(&feature, &start)
 		if err != nil {
-			fmt.Printf("error: %v", err)
+			//fmt.Printf("error in %s: %v\n", feature.Uid().String(), err)
 			return err
 		}
 		*s = append(*s, feature)

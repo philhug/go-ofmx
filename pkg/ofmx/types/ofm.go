@@ -19,37 +19,51 @@ func (uid *XtPpaUid) Hash() string {
 
 type XtPpa struct {
 	XtPpaUid     XtPpaUid `xml:"PpaUid"`
-	XtImageGroup string   `xml:"xt_imageGroup"`
+	XtImageGroup XtImageGroup   `xml:"xt_imageGroup"`
 }
 
 func (f *XtPpa) Uid() FeatureUid {
 	return &f.XtPpaUid
 }
 
-type XtPlpUid struct {
+type PlpUid struct {
+	// TODO, temp allow mid
+	Uid
+
 	XtPpaUid XtPpaUid `xml:"PpaUid"`
 }
 
-func (uid *XtPlpUid) String() string {
+func (uid *PlpUid) String() string {
 	return uidString(*uid)
 }
 
-func (uid *XtPlpUid) Hash() string {
+func (uid *PlpUid) Hash() string {
 	return uidHash(*uid)
 }
 
+type XtImageGroup struct {
+	Img             string `xml:"img"`
+}
+
 type BrStrip struct {
-	Type            XtPlpUid `xml:"type"`
-	BoxWidth        XtPlpUid `xml:"boxWidth"`
-	BoxHeight       XtPlpUid `xml:"boxHeight"`
-	TxtValue        XtPlpUid `xml:"txtValue"`
-	TxtValueLocLang XtPlpUid `xml:"txtValueLocLang"`
-	Orientation     XtPlpUid `xml:"orientation"`
-	GmlPosList      XtPlpUid `xml:"gmlPosList"`
+	Type            string `xml:"type"`
+	BoxWidth        string `xml:"boxWidth"`
+	BoxHeight       string `xml:"boxHeight"`
+	TxtValue        string `xml:"txtValue"`
+	TxtValueLocLang string `xml:"txtValueLocLang"`
+	Orientation     string `xml:"orientation"`
+	PointerGeoLat   string `xml:"pointerGeoLat"`
+	PointerGeoLong  string `xml:"pointerGeoLong"`
+	GmlPosList      string `xml:"gmlPosList"`
+	Value           string `xml:"value"`
+}
+
+type FrameShot struct {
+	GmlPosList      string `xml:"gmlPosList"`
 }
 
 type XtPlp struct {
-	XtPlpUid               XtPlpUid  `xml:"XtPlpUid"`
+	PlpUid                 PlpUid    `xml:"PlpUid"`
 	PlateIdentifier        OrgUid    `xml:"plateIdentifier"`
 	TxtDesig               string    `xml:"txtDesig"`
 	CodeType               string    `xml:"codeType"`
@@ -65,16 +79,20 @@ type XtPlp struct {
 	BasemapTransparency    string    `xml:"basemapTransparency"`
 	StaticLabelSource      string    `xml:"staticLabelSource"`
 	VisSectionalLabels     string    `xml:"VisSectionalLabels"`
+	FrameShot  			   FrameShot `xml:"frameShot"`
 	VisGridMora            string    `xml:"visGridMora"`
 	MoraNbrOfSecPerDegrLat string    `xml:"moraNbrOfSecPerDegrLat"`
 	MoraNbrOfSecPerDegrLon string    `xml:"moraNbrOfSecPerDegrLon"`
 	Projection             string    `xml:"projection"`
 	StandardParallel1      string    `xml:"standardParallel1"`
 	StandardParallel2      string    `xml:"standardParallel2"`
-	FrameShot              string    `xml:"frameShot"`
 	BrStrip                []BrStrip `xml:"brStrip"`
+
+	// TODO, document ??
+	XXBasemapOpacity    string    `xml:"basemapOpacity" validate:"isdefault"`
+	XXTerrainOpacity    string    `xml:"terrainOpacity"`
 }
 
 func (f *XtPlp) Uid() FeatureUid {
-	return &f.XtPlpUid
+	return &f.PlpUid
 }

@@ -101,14 +101,14 @@ func (f *Ndb) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 	p.Properties["CodeId"] = f.NdbUid.CodeId
 	return p, nil
 }
-func (f *Tac) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
-	pt, err := parseLongLat(f.TacUid.GeoLong, f.TacUid.GeoLat, f.CodeDatum)
+func (f *Tcn) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
+	pt, err := parseLongLat(f.TcnUid.GeoLong, f.TcnUid.GeoLat, f.CodeDatum)
 	if err != nil {
 		return nil, err
 	}
 	p := pt.ToGeoJSON()
-	p.Properties["Type"] = "Tac"
-	p.Properties["CodeId"] = f.TacUid.CodeId
+	p.Properties["Type"] = "Tcn"
+	p.Properties["CodeId"] = f.TcnUid.CodeId
 	return p, nil
 }
 func (f *Vor) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
@@ -146,7 +146,7 @@ func (f *Apn) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 	return f.XtSurface.GeoJson(fmap)
 }
 
-func (f *Misc) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
+func (f *Msc) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 	return f.XtSurface.GeoJson(fmap)
 }
 
@@ -308,6 +308,8 @@ func (f *Gbr) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 
 func FillProperties(f GeoFeature, gf *geojson.Feature) {
 	gf.Properties = flatten.Flatten(f)
+	delete(gf.Properties,"Avx")
+	delete(gf.Properties,"Avx")
 }
 
 type GeoFeature interface {

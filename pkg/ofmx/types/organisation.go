@@ -22,6 +22,10 @@ type Org struct {
 	TxtRmk   string `xml:"txtRmk"`
 }
 
+func (f *Org) Uid() FeatureUid {
+	return &f.OrgUid
+}
+
 type UniUid struct {
 	RegionalUid
 	TxtName string `xml:"txtName"`
@@ -53,7 +57,9 @@ func (f *Uni) Uid() FeatureUid {
 }
 
 type SerUid struct {
-	//Uid
+	// TODO, temp allow mid
+	Uid
+
 	UniUid   UniUid `xml:"UniUid"`
 	CodeType string `xml:"codeType"`
 	NoSeq    int    `xml:"noSeq"`
@@ -78,7 +84,9 @@ func (f *Ser) Uid() FeatureUid {
 }
 
 type FqyUid struct {
-	//Uid
+	// TODO, temp allow mid
+	Uid
+
 	SerUid       SerUid `xml:"SerUid"`
 	ValFreqTrans string `xml:"valFreqTrans"`
 }
@@ -104,6 +112,9 @@ type Fqy struct {
 	// Ftt
 	TxtRmk string `xml:"txtRmk"`
 	Cdl    Cdl    `xml:"Cdl"`
+
+	// TODO drop
+	XtPrimary int `xml:"xt_primary"`
 }
 
 func (f *Fqy) Uid() FeatureUid {

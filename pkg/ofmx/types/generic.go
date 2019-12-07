@@ -9,7 +9,7 @@ import (
 )
 
 type Uid struct {
-	Mid string `xml:"mid,attr" hash:"ignore"`
+	Mid string `xml:"mid,attr" hash:"optional"`
 }
 
 type RegionalUid struct {
@@ -27,7 +27,7 @@ type Feature interface {
 	Uid() FeatureUid
 }
 
-func intHash(uid interface{}) []string {
+func intHash(uid interface{}, all bool) []string {
 	val := make([]string, 0)
 	s := reflect.ValueOf(uid)
 	t := s.Type()
@@ -38,6 +38,9 @@ func intHash(uid interface{}) []string {
 		if h == "ignore" {
 			continue
 		}
+		if h == "optional" && !all {
+			continue
+		}
 		switch f.Kind() {
 		case reflect.String:
 			val = append(val, f.String())
@@ -46,7 +49,7 @@ func intHash(uid interface{}) []string {
 		case reflect.Int:
 			val = append(val, fmt.Sprintf("%d", f.Int()))
 		case reflect.Struct:
-			val = append(val, intHash(f.Interface())...)
+			val = append(val, intHash(f.Interface(), all)...)
 		default:
 			fmt.Println(t)
 			fmt.Println("skipping")
@@ -56,12 +59,13 @@ func intHash(uid interface{}) []string {
 }
 
 func uidString(uid interface{}) string {
-	val := intHash(uid)
+	val := intHash(uid, false)
 	return fmt.Sprintf("%s|%s", reflect.ValueOf(uid).Type().Name(), strings.Join(val, "|"))
 }
 
 func uidHash(uid interface{}) string {
-	s := uidString(uid)
+	val := intHash(uid, false)
+	s := fmt.Sprintf("%s|%s", reflect.ValueOf(uid).Type().Name(), strings.Join(val, "|"))
 	h := md5.New()
 	io.WriteString(h, s)
 	m := fmt.Sprintf("%x", h.Sum(nil))
