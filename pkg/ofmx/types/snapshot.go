@@ -3,13 +3,13 @@ package types
 import (
 	"encoding/xml"
 
-	"fmt"
+	"log"
 	"reflect"
 )
 
-// <AIXM-Snapshot xsi="http://www.aixm.aero/schema/4.5/AIXM-Snapshot.xsd" version="4.5 + OFM extensions of version 0.1 " effective="2014-01-07T13:17:32" origin="F-OPS data distribution client" created="2014-01-07T12:17:32">
+// <OFMX-Snapshot version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.openflightmaps.org/0/OFMX-Snapshot.xsd" effective="2019-11-28T13:32:23" origin="ofmx editor" created="2019-11-28T13:32:23" namespace="210444d1-4576-e92d-0983-4669182a8c04">
 
-type AixmSnapshot struct {
+type OfmxSnapshot struct {
 	//XMLName string
 	Xsi string `xml:"xsi,attr"`
 	NoNamespaceSchemaLocation string `xml:"noNamespaceSchemaLocation,attr"`
@@ -39,12 +39,12 @@ func (s *FeatureList) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error
 	if err == nil {
 		err := d.DecodeElement(&feature, &start)
 		if err != nil {
-			//fmt.Printf("error in %s: %v\n", feature.Uid().String(), err)
+			log.Printf("error in %s: %v\n", feature.Uid().String(), err)
 			return err
 		}
 		*s = append(*s, feature)
 	} else {
-		fmt.Println("Unknown feature: " + start.Name.Local)
+		log.Println("Unknown feature: " + start.Name.Local)
 		d.Skip()
 	}
 	return nil

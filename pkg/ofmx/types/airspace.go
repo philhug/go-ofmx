@@ -8,7 +8,7 @@ type AseUid struct {
 	CodeId   string `xml:"codeId"`
 
 	// TODO, drop again
-	NewEntity string `xml:"newEntity,attr" validate:"isdefault"`
+	NewEntity string `xml:"newEntity,attr" validate:"isdefault"  hash:"ignore"`
 }
 
 func (uid *AseUid) String() string {

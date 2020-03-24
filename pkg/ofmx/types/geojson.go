@@ -22,6 +22,9 @@ func convertFromDMS(f float64) float64 {
 }
 
 func parseCoord(in string) (float64, error) {
+	if len(in) == 0 {
+		return 0, nil
+	}
 	v := in[:len(in)-1]
 	d := string(in[len(in)-1])
 
@@ -257,8 +260,13 @@ func (f *Abd) GeoJson(fmap FeatureMap) (*geojson.Feature, error) {
 
 	p.Properties["fill"] = "#ffbaba"
 
-	ase := fmap[f.AbdUid.AseUid.String()].(*Ase)
-	p.Properties["TxtName"] = ase.TxtName
+	ase, ok := fmap[f.AbdUid.AseUid.String()].(*Ase)
+	if ok {
+		p.Properties["TxtName"] = ase.TxtName
+	} else {
+		//TODO
+		fmt.Printf("Ase '%s' not found for: %s\n", f.AbdUid.AseUid.String(), f.AbdUid.String())
+	}
 
 	return p, nil
 }
@@ -280,6 +288,11 @@ func (f *Gbr) GeoJsonPath(fmap FeatureMap) (*geo.Path, error) {
 			//fmt.Printf("CodeType End: %s\n", gbv)
 		default:
 			fmt.Println("UNKNOWN CodeType: " + gbv.CodeType)
+			// TODO, drop hack
+			psn, err := parseLongLat(gbv.GeoLong, gbv.GeoLat, gbv.CodeDatum)
+			if err == nil {
+				poly.Push(psn)
+			}
 		}
 	}
 	return poly, nil

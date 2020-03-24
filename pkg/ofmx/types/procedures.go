@@ -2,8 +2,11 @@ package types
 
 type PrcUid struct {
 	RegionalUid
-	AhpUid AhpUid `xml:"AhpUid"`
-	CodeId string `xml:"codeId"`
+	AhpUid AhpUid  `xml:"AhpUid"`
+	CodeId string  `xml:"codeId"`
+
+	//TODO
+	XXXRwyUid  string `xml:"RwyUid,attr,omitempty" validate:"isdefault"`
 }
 
 func (uid *PrcUid) String() string {
@@ -23,7 +26,6 @@ type Leg struct {
 
 type Prc struct {
 	PrcUid                 PrcUid        `xml:"PrcUid"`
-	TxtName                string        `xml:"txtName"`
 	CodeType               string        `xml:"codeType"`
 	UsageType              string        `xml:"usageType"`
 	BezTrajectory          BezTrajectory `xml:"beztrajectory"`
@@ -33,6 +35,8 @@ type Prc struct {
 
 	// TODO, FIX incorrect data
 	XXXtFir  string `xml:"xt_fir,attr,omitempty" hash:"ignore" validate:"isdefault"`
+	XXXRwyUid  string `xml:"RwyUid,attr,omitempty" validate:"isdefault"`
+
 }
 
 func (f *Prc) Uid() FeatureUid {

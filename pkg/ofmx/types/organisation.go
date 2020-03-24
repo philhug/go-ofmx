@@ -28,7 +28,9 @@ func (f *Org) Uid() FeatureUid {
 
 type UniUid struct {
 	RegionalUid
+
 	TxtName string `xml:"txtName"`
+	CodeType string `xml:"codeType"`
 }
 
 func (uid *UniUid) String() string {
@@ -39,14 +41,22 @@ func (uid *UniUid) Hash() string {
 	return uidHash(*uid)
 }
 
+func (uid *UniUid) Ref() *Uni {
+	if uid.ref == nil {
+		//TODO, needed? BUGON
+		return nil
+	}
+	return uid.ref.(*Uni)
+}
+
 type Uni struct {
 	// Attributes
 	Source string `xml:"source,attr,omitempty"`
 	XtFir  string `xml:"xt_fir,attr,omitempty"`
 
 	UniUid    UniUid `xml:"UniUid"`
-	OrgUid    UniUid `xml:"OrgUid"`
-	AhpUid    AhpUid `xml:"AhpUid"`
+	OrgUid    *OrgUid `xml:"OrgUid"`
+	AhpUid    *AhpUid `xml:"AhpUid"`
 	CodeType  string `xml:"codeType"`
 	CodeClass string `xml:"codeClass"`
 	TxtRmk    string `xml:"txtRmk"`
@@ -60,7 +70,7 @@ type SerUid struct {
 	// TODO, temp allow mid
 	Uid
 
-	UniUid   UniUid `xml:"UniUid"`
+	UniUid   *UniUid `xml:"UniUid"`
 	CodeType string `xml:"codeType"`
 	NoSeq    int    `xml:"noSeq"`
 }
@@ -71,6 +81,14 @@ func (uid *SerUid) String() string {
 
 func (uid *SerUid) Hash() string {
 	return uidHash(*uid)
+}
+
+func (uid *SerUid) Ref() *Ser {
+	if uid.ref == nil {
+		//TODO, needed? BUGON
+		return nil
+	}
+	return uid.ref.(*Ser)
 }
 
 type Ser struct {
@@ -87,7 +105,7 @@ type FqyUid struct {
 	// TODO, temp allow mid
 	Uid
 
-	SerUid       SerUid `xml:"SerUid"`
+	SerUid       *SerUid `xml:"SerUid"`
 	ValFreqTrans string `xml:"valFreqTrans"`
 }
 

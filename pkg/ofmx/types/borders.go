@@ -27,6 +27,9 @@ type Gbv struct {
 	UomRadiusArc   string `xml:"uomRadiusArc"`
 	ValHex         string `xml:"valHex"`
 	TxtRmk         string `xml:"txtRmk"`
+
+	// TODO, invalid
+	XXValCrc string `xml:"valCrc" validate:"isdefault"`
 }
 
 func (uid *GbrUid) String() string {

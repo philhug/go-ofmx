@@ -1,6 +1,6 @@
 package types
 
-type XtPpaUid struct {
+type PpaUid struct {
 	RegionalUid
 	PackageType            string `xml:"packageType"`
 	EntityOfInterestCodeId string `xml:"entityOfInterestCodeId"`
@@ -9,28 +9,35 @@ type XtPpaUid struct {
 	StatusRelease          string `xml:"statusRelease"`
 }
 
-func (uid *XtPpaUid) String() string {
+func (uid *PpaUid) String() string {
 	return uidString(*uid)
 }
 
-func (uid *XtPpaUid) Hash() string {
+func (uid *PpaUid) Hash() string {
 	return uidHash(*uid)
 }
 
-type XtPpa struct {
-	XtPpaUid     XtPpaUid `xml:"PpaUid"`
-	XtImageGroup XtImageGroup   `xml:"xt_imageGroup"`
+type Ppa struct {
+	PpaUid       PpaUid       `xml:"PpaUid"`
+
+	// TODO
+	XXXtxtPurpose    string    `xml:"txtPurpose" validate:"isdefault"`
+	XXXtxtPurposeLocLang    string    `xml:"txtPurposeLocLang" validate:"isdefault"`
+	XtImageGroup XtImageGroup `xml:"xt_imageGroup" validate:"isdefault"`
+	XXXstatusRelease    string    `xml:"statusRelease" validate:"isdefault"`
+	XXXdisplayType    string    `xml:"displayType" validate:"isdefault"`
 }
 
-func (f *XtPpa) Uid() FeatureUid {
-	return &f.XtPpaUid
+func (f *Ppa) Uid() FeatureUid {
+	return &f.PpaUid
 }
 
 type PlpUid struct {
 	// TODO, temp allow mid
 	Uid
+	PlateIdentifier        OrgUid    `xml:"plateIdentifier"`
 
-	XtPpaUid XtPpaUid `xml:"PpaUid"`
+	XtPpaUid PpaUid `xml:"PpaUid"`
 }
 
 func (uid *PlpUid) String() string {
@@ -62,9 +69,8 @@ type FrameShot struct {
 	GmlPosList      string `xml:"gmlPosList"`
 }
 
-type XtPlp struct {
+type Plp struct {
 	PlpUid                 PlpUid    `xml:"PlpUid"`
-	PlateIdentifier        OrgUid    `xml:"plateIdentifier"`
 	TxtDesig               string    `xml:"txtDesig"`
 	CodeType               string    `xml:"codeType"`
 	Cat                    string    `xml:"cat"`
@@ -89,10 +95,12 @@ type XtPlp struct {
 	BrStrip                []BrStrip `xml:"brStrip"`
 
 	// TODO, document ??
-	XXBasemapOpacity    string    `xml:"basemapOpacity" validate:"isdefault"`
-	XXTerrainOpacity    string    `xml:"terrainOpacity"`
+	XXXBasemapOpacity    string    `xml:"basemapOpacity" validate:"isdefault"`
+	XXXTerrainOpacity    string    `xml:"terrainOpacity" validate:"isdefault"`
+	XXXzoomLevel    string    `xml:"zoomLevel" validate:"isdefault"`
+	XXXbriefingStripPattern    string    `xml:"briefingStripPattern" validate:"isdefault"`
 }
 
-func (f *XtPlp) Uid() FeatureUid {
+func (f *Plp) Uid() FeatureUid {
 	return &f.PlpUid
 }

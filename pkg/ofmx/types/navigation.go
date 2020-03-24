@@ -16,14 +16,17 @@ func (uid *DpnUid) Hash() string {
 }
 
 type Dpn struct {
-	DpnUid    DpnUid `xml:"DpnUid"`
-	CodeDatum string `xml:"codeDatum"`
-	CodeType  string `xml:"codeType"`
-	TxtName   string `xml:"txtName"`
-	TxtRmk    string `xml:"txtRmk"`
-	// AhpUid_codeId TODO ofm
+	DpnUid      DpnUid `xml:"DpnUid"`
+	AhpUidAssoc AhpUid `xml:"AhpUidAssoc"`
+	CodeDatum   string `xml:"codeDatum"`
+	CodeType    string `xml:"codeType"`
+	TxtName     string `xml:"txtName"`
+	TxtRmk      string `xml:"txtRmk"`
 
 	// TODO, drop, invalid
+	XXvalCrs        string `xml:"valCrs" validate:"isdefault"`
+	XXvalHgt        string `xml:"valHgt" validate:"isdefault"`
+	XXuomDistVer    string `xml:"uomDistVer" validate:"isdefault"`
 	XXuomFreq       string `xml:"uomFreq" validate:"isdefault"`
 	XXcodeTypeNorth string `xml:"codeTypeNorth" validate:"isdefault"`
 	XXAhpUid_codeId string `xml:"AhpUid_codeId" validate:"isdefault"`
@@ -51,6 +54,7 @@ func (uid *DmeUid) Hash() string {
 type Dme struct {
 	DmeUid      DmeUid `xml:"DmeUid"`
 	OrgUid      OrgUid `xml:"OrgUid"`
+	VorUid      VorUid `xml:"VorUid"`
 	TxtName     string `xml:"txtName"`
 	CodeChannel string `xml:"codeChannel"`
 	CodeDatum   string `xml:"codeDatum"`
@@ -171,6 +175,13 @@ type Tcn struct {
 	UomDistVer  string `xml:"uomDistVer"`
 	// Ttt TODO
 	TxtRmk string `xml:"txtRmk"`
+	// TODO, drop invalid
+	XXXvalMagVar    string `xml:"valMagVar" validate:"isdefault"`
+	XXXdateMagVar   string `xml:"dateMagVar" validate:"isdefault"`
+	XXXvalMagVarChg string `xml:"valMagVarChg" validate:"isdefault"`
+	XXXVorUid       VorUid `xml:"VorUid" validate:"isdefault"`
+	XXXvalGhostFreq string `xml:"valGhostFreq" validate:"isdefault"`
+	XXXuomGhostFreq string `xml:"uomGhostFreq" validate:"isdefault"`
 }
 
 func (f *Tcn) Uid() FeatureUid {

@@ -1,5 +1,10 @@
 package types
 
+const (
+	CODE_USAGE_LIMITATION_PERMIT = "PERMIT"
+	CODE_USAGE_LIMITATION_FORBID = "FORBID"
+)
+
 // Ahp - Airport
 
 type AhpUid struct {
@@ -13,6 +18,14 @@ func (uid *AhpUid) String() string {
 
 func (uid *AhpUid) Hash() string {
 	return uidHash(*uid)
+}
+
+func (uid *AhpUid) Ref() *Ahp {
+	if uid.ref == nil {
+		//TODO, needed? BUGON
+		return nil
+	}
+	return uid.ref.(*Ahp)
 }
 
 type Ahp struct {
@@ -40,9 +53,12 @@ type Ahp struct {
 	TxtRmk           string `xml:"txtRmk"`
 	// Aht TODO
 
+	// References
+	Ahu []*Ahu
+
 	// TODO, drop, document
-	XXTxtDescrSite     string `xml:"txtDescrSite" validate:"isdefault"`
-	XXvalGeoidUndulation     string `xml:"valGeoidUndulation" validate:"isdefault"`
+	XXTxtDescrSite       string `xml:"txtDescrSite" validate:"isdefault"`
+	XXvalGeoidUndulation string `xml:"valGeoidUndulation" validate:"isdefault"`
 }
 
 func (f *Ahp) Uid() FeatureUid {
@@ -65,6 +81,14 @@ func (uid *RwyUid) String() string {
 
 func (uid *RwyUid) Hash() string {
 	return uidHash(*uid)
+}
+
+func (uid *RwyUid) Ref() *Rwy {
+	if uid.ref == nil {
+		//TODO, needed? BUGON
+		return nil
+	}
+	return uid.ref.(*Rwy)
 }
 
 type SurfaceCharacteristics struct {
@@ -101,7 +125,7 @@ type RdnUid struct {
 	// TODO, temp allow mid
 	Uid
 
-	RwyUid   RwyUid `xml:"RwyUid"`
+	RwyUid   *RwyUid `xml:"RwyUid"`
 	TxtDesig string `xml:"txtDesig"`
 }
 
@@ -111,6 +135,14 @@ func (uid *RdnUid) String() string {
 
 func (uid *RdnUid) Hash() string {
 	return uidHash(*uid)
+}
+
+func (uid *RdnUid) Ref() *Rdn {
+	if uid.ref == nil {
+		//TODO, needed? BUGON
+		return nil
+	}
+	return uid.ref.(*Rdn)
 }
 
 type Rdn struct {
@@ -125,6 +157,9 @@ type Rdn struct {
 	ValElevTdz string `xml:"valElevTdz"`
 	UomElevTdz string `xml:"uomElevTdz"`
 	TxtRmk     string `xml:"txtRmk"`
+
+	// References
+	Rdd []*Rdd
 }
 
 func (f *Rdn) Uid() FeatureUid {
@@ -152,7 +187,7 @@ func (uid *RddUid) Hash() string {
 
 type Rdd struct {
 	RddUid  RddUid `xml:"RddUid"`
-	ValDist int    `xml:"valDist"`
+	ValDist string `xml:"valDist"`
 	UomDist string `xml:"uomDist"`
 	TxtRmk  string `xml:"txtRmk"`
 }
@@ -177,6 +212,10 @@ func (uid *RlsUid) String() string {
 
 func (uid *RlsUid) Hash() string {
 	return uidHash(*uid)
+}
+
+func (uid *RlsUid) Region() string {
+	return uid.RdnUid.RwyUid.AhpUid.Region
 }
 
 type Rls struct {
@@ -212,8 +251,8 @@ type Ahu struct {
 	UsageLimitation []UsageLimitation `xml:"UsageLimitation"`
 
 	// TODO, THIS IS WRONG!!!
-	XXMid string `xml:"mid,attr" validate:"isdefault"`
-	XXusageLimitation interface{} `xml:"usageLimitation" validate:"isdefault"`
+	XXMid                 string      `xml:"mid,attr" validate:"isdefault"`
+	XXusageLimitation     interface{} `xml:"usageLimitation" validate:"isdefault"`
 	XXcodeUsageLimitation interface{} `xml:"codeUsageLimitation" validate:"isdefault"`
 }
 
@@ -335,7 +374,7 @@ type Twy struct {
 	XtSurface        XtSurface `xml:"xt_surface"`
 
 	// TODO document
-	XtLabel        interface{} `xml:"xt_label"`
+	XtLabel interface{} `xml:"xt_label"`
 }
 
 func (f *Twy) Uid() FeatureUid {
@@ -395,7 +434,7 @@ type Apn struct {
 	XtSurface XtSurface `xml:"xt_surface"`
 
 	// TODO document
-	XtLabel        interface{} `xml:"xt_label"`
+	XtLabel interface{} `xml:"xt_label"`
 }
 
 func (f *Apn) Uid() FeatureUid {
@@ -460,9 +499,265 @@ type Msc struct {
 	XtSurface XtSurface `xml:"xt_surface"`
 
 	// TODO document
-	XtLabel        interface{} `xml:"xt_label"`
+	XtLabel interface{} `xml:"xt_label"`
 }
 
 func (f *Msc) Uid() FeatureUid {
 	return &f.MscUid
+}
+
+// Aha - Airport Address
+
+type AhaUid struct {
+	// TODO, temp allow mid
+	Uid
+
+	AhpUid   AhpUid `xml:"AhpUid"`
+	CodeType string `xml:"codeType"`
+	NoSeq    int    `xml:"noSeq"`
+}
+
+func (uid *AhaUid) String() string {
+	return uidString(*uid)
+}
+
+func (uid *AhaUid) Hash() string {
+	return uidHash(*uid)
+}
+
+type Aha struct {
+	AhaUid     AhaUid `xml:"AhaUid"`
+	TxtAddress string `xml:"txtAddress"`
+	TxtRmk     string `xml:"txtRmk"`
+}
+
+func (f *Aha) Uid() FeatureUid {
+	return &f.AhaUid
+}
+
+// Fato - Final approach and takeoff area
+
+type FtoUid struct {
+	// TODO, temp allow mid
+	Uid
+
+	AhpUid   AhpUid `xml:"AhpUid"`
+	TxtDesig string `xml:"txtDesig"`
+}
+
+func (uid *FtoUid) String() string {
+	return uidString(*uid)
+}
+
+func (uid *FtoUid) Hash() string {
+	return uidHash(*uid)
+}
+
+type Fto struct {
+	FtoUid FtoUid `xml:"FtoUid"`
+
+	ValLen                  string `xml:"valLen"`
+	ValWid                  string `xml:"valWid"`
+	UomDim                  string `xml:"uomDim"`
+	CodeComposition         string `xml:"codeComposition"`
+	CodePreparation         string `xml:"codePreparation"`
+	CodeCondSfc             string `xml:"codeCondSfc"`
+	ValPcnClass             string `xml:"valPcnClass"`
+	CodePcnPavementType     string `xml:"codePcnPavementType"`
+	CodePcnPavementSubgrade string `xml:"codePcnPavementSubgrade"`
+	CodePcnMaxTirePressure  string `xml:"codePcnMaxTirePressure"`
+	CodePcnEvalMethod       string `xml:"codePcnEvalMethod"`
+	TxtPcnNote              string `xml:"txtPcnNote"`
+	ValSiwlWeight           string `xml:"valSiwlWeight"`
+	UomSiwlWeight           string `xml:"uomSiwlWeight"`
+	ValSiwlTirePressure     string `xml:"valSiwlTirePressure"`
+	UomSiwlTirePressure     string `xml:"uomSiwlTirePressure"`
+	ValAuwWeight            string `xml:"valAuwWeight"`
+	TomAuwWeight            string `xml:"uomAuwWeight"`
+	ZxtProfile              string `xml:"txtProfile"`
+	TxtMarking              string `xml:"txtMarking"`
+	CodeSts                 string `xml:"codeSts"`
+	TxtRmk                  string `xml:"txtRmk"`
+
+	// TODO, drop, document
+	XXXmaxRotorDia string `xml:"maxRotorDia" validate:"isdefault"`
+}
+
+func (f *Fto) Uid() FeatureUid {
+	return &f.FtoUid
+}
+
+// Fato Direction
+
+type FdnUid struct {
+	// TODO, temp allow mid
+	Uid
+
+	FtoUid   FtoUid `xml:"FtoUid"`
+	TxtDesig string `xml:"txtDesig"`
+}
+
+func (uid *FdnUid) String() string {
+	return uidString(*uid)
+}
+
+func (uid *FdnUid) Hash() string {
+	return uidHash(*uid)
+}
+
+type Fdn struct {
+	FdnUid FdnUid `xml:"FdnUid"`
+
+	ValTrueBrg           string `xml:"valTrueBrg"`
+	ValMagBrg            string `xml:"valMagBrg"`
+	CodeTypeVasis        string `xml:"codeTypeVasis"`
+	CodePsnVasis         string `xml:"codePsnVasis"`
+	NoBoxVasis           string `xml:"noBoxVasis"`
+	CodePortableVasis    string `xml:"codePortableVasis"`
+	ValSlopeAngleGpVasis string `xml:"valSlopeAngleGpVasis"`
+	ValMeht              string `xml:"valMeht"`
+	UomMeht              string `xml:"uomMeht"`
+	TxtRmk               string `xml:"txtRmk"`
+
+	// TODO, drop, document
+	XXXrearTakeOffSectorAvail      string             `xml:"rearTakeOffSectorAvail" validate:"isdefault"`
+	XXXrearTakeoffSectorBrg        string             `xml:"rearTakeoffSectorBrg" validate:"isdefault"`
+	XXXrearTakeoffSectorSlopeAngle string             `xml:"rearTakeoffSectorSlopeAngle" validate:"isdefault"`
+	XXXcodingMode                  string             `xml:"codingMode" validate:"isdefault"`
+	XXXnonIcaoValSlopeAngle        string             `xml:"nonIcaoValSlopeAngle" validate:"isdefault"`
+	XXXnonIcaoValOpeningAngle      string             `xml:"nonIcaoValOpeningAngle" validate:"isdefault"`
+	XXXnonIcaoMaxSectorLen         string             `xml:"nonIcaoMaxSectorLen" validate:"isdefault"`
+	XXXiapInitialAlt               string             `xml:"iapInitialAlt" validate:"isdefault"`
+	XXXgeoLat                      string             `xml:"geoLat" validate:"isdefault"`
+	XXXgeoLong                     string             `xml:"geoLong" validate:"isdefault"`
+	XXXgmlSectorExtend             XXXgmlSectorExtend `xml:"gmlSectorExtend" validate:"isdefault"`
+	XXXgmlSectorCenterline         XXXgmlSectorExtend `xml:"gmlSectorCenterline" validate:"isdefault"`
+}
+
+type XXXgmlSectorExtend struct {
+	XXXgmlPosList string `xml:"gmlPosList" validate:"isdefault"`
+}
+
+func (f *Fdn) Uid() FeatureUid {
+	return &f.FdnUid
+}
+
+// Fato Direction Declared Distance
+
+type FddUid struct {
+	// TODO, temp allow mid
+	Uid
+
+	FdnUid        FdnUid `xml:"FdnUid"`
+	CodeType      string `xml:"codeType"`
+	CodeDayPeriod string `xml:"codeDayPeriod"`
+}
+
+func (uid *FddUid) String() string {
+	return uidString(*uid)
+}
+
+func (uid *FddUid) Hash() string {
+	return uidHash(*uid)
+}
+
+type Fdd struct {
+	FddUid FddUid `xml:"FddUid"`
+
+	ValDist string `xml:"valDist"`
+	UomDist string `xml:"uomDist"`
+	TxtRmk  string `xml:"txtRmk"`
+}
+
+func (f *Fdd) Uid() FeatureUid {
+	return &f.FddUid
+}
+
+// Helipad (TLOF)
+
+type TlaUid struct {
+	// TODO, temp allow mid
+	Uid
+
+	AhpUid   AhpUid `xml:"AhpUid"`
+	TxtDesig string `xml:"txtDesig"`
+}
+
+func (uid *TlaUid) String() string {
+	return uidString(*uid)
+}
+
+func (uid *TlaUid) Hash() string {
+	return uidHash(*uid)
+}
+
+type Tla struct {
+	TlaUid TlaUid `xml:"TlaUid"`
+	FtoUid FtoUid `xml:"FtoUid"`
+	// TODO
+	TxtDesig                string `xml:"txtDesig"`
+	GeoLat                  string `xml:"geoLat"`
+	GeoLong                 string `xml:"geoLong"`
+	CodeDatum               string `xml:"codeDatum"`
+	ValElev                 string `xml:"valElev"`
+	UomDistVer              string `xml:"uomDistVer"`
+	ValLen                  string `xml:"valLen"`
+	ValWid                  string `xml:"valWid"`
+	UomDim                  string `xml:"uomDim"`
+	CodeComposition         string `xml:"codeComposition"`
+	CodePreparation         string `xml:"codePreparation"`
+	CodeCondSfc             string `xml:"codeCondSfc"`
+	ValPcnClass             string `xml:"valPcnClass"`
+	CodePcnPavementType     string `xml:"codePcnPavementType"`
+	CodePcnPavementSubgrade string `xml:"codePcnPavementSubgrade"`
+	CodePcnMaxTirePressure  string `xml:"codePcnMaxTirePressure"`
+	CodePcnEvalMethod       string `xml:"codePcnEvalMethod"`
+	TxtPcnNote              string `xml:"txtPcnNote"`
+	ValSiwlWeight           string `xml:"valSiwlWeight"`
+	UomSiwlWeight           string `xml:"uomSiwlWeight"`
+	ValSiwlTirePressure     string `xml:"valSiwlTirePressure"`
+	UomSiwlTirePressure     string `xml:"uomSiwlTirePressure"`
+	ValAuwWeight            string `xml:"valAuwWeight"`
+	UomAuwWeight            string `xml:"uomAuwWeight"`
+	CodeClassHel            string `xml:"codeClassHel"`
+	TxtMarking              string `xml:"txtMarking"`
+	CodeSts                 string `xml:"codeSts"`
+	TxtRmk                  string `xml:"txtRmk"`
+
+	XXXvalTrueBrg string `xml:"valTrueBrg"`
+}
+
+func (f *Tla) Uid() FeatureUid {
+	return &f.TlaUid
+}
+
+// Helipad (TLOF) Lightning
+
+type TlsUid struct {
+	// TODO, temp allow mid
+	Uid
+
+	TlaUid  TlaUid `xml:"TlaUid"`
+	CodePsn string `xml:"codePsn"`
+}
+
+func (uid *TlsUid) String() string {
+	return uidString(*uid)
+}
+
+func (uid *TlsUid) Hash() string {
+	return uidHash(*uid)
+}
+
+type Tls struct {
+	TlsUid TlsUid `xml:"TlsUid"`
+
+	TxtDescr   string `xml:"txtDescr"`
+	CodeIntst  string `xml:"codeIntst"`
+	CodeColour string `xml:"codeColour"`
+	TxtRmk     string `xml:"txtRmk"`
+}
+
+func (f *Tls) Uid() FeatureUid {
+	return &f.TlsUid
 }
